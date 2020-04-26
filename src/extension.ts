@@ -10,18 +10,31 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "eyebreaker" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('eyebreaker.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from eyebreaker!');
-	});
+	vscode.window.showInformationMessage("20 minute eyebreaker timer started");
+	let counter = 20 * 60;
+	counter = 5
+	startTimer(counter);
 
-	context.subscriptions.push(disposable);
+
+	vscode.commands.registerCommand("eyebreaker.restart",
+		function () {
+			vscode.window.showInformationMessage("20 minute eyebreaker timer restarted");
+			startTimer(counter)
+		})
+}
+
+function startTimer(counter: number) {
+	let intervalId = setInterval(() => {
+		counter = counter - 1;
+		console.log(counter)
+		if (counter === 0) {
+			vscode.window.showWarningMessage("EYEBREAK!");
+			vscode.window.showInformationMessage("Restart timer by f1 -> 'Eyebreaker'")
+			clearInterval(intervalId)
+		}
+	}, 1000);
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
